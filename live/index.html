@@ -156,6 +156,9 @@
         const option = document.createElement("option");
         option.value = stream.url;
         option.textContent = stream.language;
+		if (stream.language === "Hindi") {
+            option.selected = true;
+        }
         languageSelect.appendChild(option);
       });
 
