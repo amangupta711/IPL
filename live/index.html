@@ -149,15 +149,28 @@
   <script>
     document.addEventListener("DOMContentLoaded", async function() {
       const response = await fetch("https://raw.githubusercontent.com/cu-sanjay/IPL/main/live/m3u8.json");
+      const response2 = await fetch("https://raw.githubusercontent.com/GujjuDada/IplDekkho/main/M1.json");
       const data = await response.json();
-      const languageSelect = document.getElementById("language-select");
+      const data2 = await response2.json();
+      let hindi4kUrl = "";
+      data2.forEach(stream => {
+        if (stream.id === 'HINDI_4K') {
+          hindi4kUrl = stream.link;
+        }
+      });
 
+      const languageSelect = document.getElementById("language-select");
+      const Hindi4k = {
+        language : "Hindi4K",
+        url : hindi4kUrl
+      };
+      data.streams.push(Hindi4k);
       data.streams.forEach(stream => {
         const option = document.createElement("option");
         option.value = stream.url;
         option.textContent = stream.language;
-		if (stream.language === "Hindi") {
-            option.selected = true;
+        if (stream.language === "Hindi") {
+          option.selected = true;
         }
         languageSelect.appendChild(option);
       });
