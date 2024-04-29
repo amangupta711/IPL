@@ -186,6 +186,14 @@
 
       //loadAndPlayStream(currentStreamUrl);
 
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(currentStreamUrl);
+        hls.attachMedia(videoElement);
+      } else {
+        alert("HLS is not supported by your browser.");
+      }
+
       function loadAndPlayStream(streamUrl) {
         if (Hls.isSupported()) {
           const hls = new Hls();
