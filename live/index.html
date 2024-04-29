@@ -152,24 +152,35 @@
       const response2 = await fetch("https://raw.githubusercontent.com/GujjuDada/IplDekkho/main/M1.json");
       const data = await response.json();
       const data2 = await response2.json();
+      let hindi2Url = "";
       let hindi4kUrl = "";
       data2.forEach(stream => {
         if (stream.id === 'Hindi_Ads_free') {
+          hindi2Url = stream.link;
+        }
+        if (stream.id === 'HINDI_4K') {
           hindi4kUrl = stream.link;
         }
       });
 
-      const languageSelect = document.getElementById("language-select");
-      const Hindi4k = {
+      const Hindi2 = {
         language : "Hindi2",
+        url : hindi2Url
+      };
+
+      const Hindi4k = {
+        language : "Hindi4K",
         url : hindi4kUrl
       };
-      data.streams.splice(0,0,Hindi4k);
+
+      const languageSelect = document.getElementById("language-select");
+      data.streams.splice(2,0,Hindi2);
+      data.streams.splice(3,0,Hindi4k);
       data.streams.forEach(stream => {
         const option = document.createElement("option");
         option.value = stream.url;
         option.textContent = stream.language;
-        if (stream.language === "Hindi") {
+        if (stream.language === "Hindi2") {
           option.selected = true;
         }
         languageSelect.appendChild(option);
@@ -238,7 +249,19 @@
 
       languageSelect.addEventListener("change", () => {
         currentStreamUrl = languageSelect.value;
-        loadAndPlayStream(currentStreamUrl);
+        
+        if (Hls.isSupported()) {
+          const hls = new Hls();
+          hls.loadSource(currentStreamUrl);
+          hls.attachMedia(videoElement);
+          hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            videoElement.pause();
+            isPlaying = false;
+            playButton.textContent = "Play";
+          });
+        } else {
+          alert("HLS is not supported by your browser.");
+        }
       });
     });
   </script>
