@@ -154,17 +154,17 @@
       const data2 = await response2.json();
       let hindi4kUrl = "";
       data2.forEach(stream => {
-        if (stream.id === 'HINDI_4K') {
+        if (stream.id === 'Hindi_Ads_free') {
           hindi4kUrl = stream.link;
         }
       });
 
       const languageSelect = document.getElementById("language-select");
       const Hindi4k = {
-        language : "Hindi4K",
+        language : "Hindi2",
         url : hindi4kUrl
       };
-      data.streams.push(Hindi4k);
+      data.streams.splice(0,0,Hindi4k);
       data.streams.forEach(stream => {
         const option = document.createElement("option");
         option.value = stream.url;
@@ -184,7 +184,7 @@
       let isPlaying = false;
       let currentStreamUrl = languageSelect.value;
 
-      loadAndPlayStream(currentStreamUrl);
+      //loadAndPlayStream(currentStreamUrl);
 
       function loadAndPlayStream(streamUrl) {
         if (Hls.isSupported()) {
