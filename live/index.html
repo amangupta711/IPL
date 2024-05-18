@@ -150,8 +150,16 @@
     document.addEventListener("DOMContentLoaded", async function() {
       const response = await fetch("https://raw.githubusercontent.com/cu-sanjay/IPL/main/live/m3u8.json");
       const response2 = await fetch("https://raw.githubusercontent.com/GujjuDada/IplDekkho/main/M1.json");
+      const response3 = await fetch("https://raw.githubusercontent.com/Ronak713/IPL_Streaming/main/index.html");
       const data = await response.json();
       const data2 = await response2.json();
+      const data3 = await response3.text();
+
+      const regex = /file:"(https:\/\/[^"]+)"/;
+      const match = data3.match(regex);
+      const extractedUrl = match[1];
+      
+
       let hindi2Url = "";
       let hindi4kUrl = "";
       data2.forEach(stream => {
@@ -173,14 +181,21 @@
         url : hindi4kUrl
       };
 
+      const Hindi_Updated = {
+        language : "Hindi3",
+        url : extractedUrl
+      }
+
       const languageSelect = document.getElementById("language-select");
       data.streams.splice(2,0,Hindi2);
       data.streams.splice(3,0,Hindi4k);
+      data.streams.splice(4,0,Hindi_Updated);
+
       data.streams.forEach(stream => {
         const option = document.createElement("option");
         option.value = stream.url.replace("master.m3u8", "master_1080p.m3u8");
         option.textContent = stream.language;
-        if (stream.language === "Hindi") {
+        if (stream.language === "Hindi3") {
           option.selected = true;
         }
         languageSelect.appendChild(option);
